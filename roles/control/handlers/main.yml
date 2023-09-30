@@ -1,0 +1,5 @@
+---
+- name: Restart docker compose
+  community.docker.docker_compose:
+    project_src: /opt/monitoring
+    restarted: true
