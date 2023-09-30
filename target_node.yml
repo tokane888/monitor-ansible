@@ -1,0 +1,6 @@
+---
+- name: install node exporter
+  hosts: all
+  become: true
+  roles:
+    - node

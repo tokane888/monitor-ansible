@@ -1,0 +1,6 @@
+---
+- name: Setup control node
+  hosts: control
+  become: true
+  roles:
+    - control

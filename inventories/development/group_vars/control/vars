@@ -1,0 +1,4 @@
+---
+grafana_user: hoge
+grafana_pass: fuga.com
+root_dir: /opt/monitoring
