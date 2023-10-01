@@ -1,0 +1,6 @@
+---
+- name: Install node_exporter
+  ansible.builtin.include_role:
+    name: node_exporter
+  vars:
+    node_exporter_ver: "{{ node_exporter.ver }}"

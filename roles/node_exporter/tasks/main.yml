@@ -1,0 +1,51 @@
+---
+# 必須オプション
+#   node_exporter_ver: node exporterのバージョン
+# オプション引数
+#   cache_dir: ダウンロードした資材を保管するキャッシュディレクトリ
+- name: Make cache directory
+  ansible.builtin.file:
+    path: "{{ cache_dir }}"
+    state: directory
+    mode: "0755"
+  delegate_to: localhost
+
+# TODO: archラズパイzero対応
+# TODO: archラズパイ3B+以降対応(arm64)
+- name: Convert ansible_architecture to arch in download url
+  ansible.builtin.set_fact:
+    arch: "{{ 'amd64' if ansible_architecture == 'x86_64' else 'unknown' }}"
+- name: Check if node exporter tarball exists in cache directory
+  ansible.builtin.stat:
+    path: "{{ cache_dir }}/node_exporter-{{ node_exporter_ver }}.linux-{{ arch }}.tar.gz"
+  register: node_exporter_stat
+  delegate_to: localhost
+- name: Download node exporter when node exporter tarball doesn't exists in cache directory
+  when: not node_exporter_stat.stat.exists
+  ansible.builtin.get_url:
+    url:
+      "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_ver }}/node_exporter-{{ node_exporter_ver }}.linux-{{ arch }}.tar.gz"
+    dest: "{{ cache_dir }}"
+    mode: '0755'
+  delegate_to: localhost
+- name: Extract node exporter tarball
+  ansible.builtin.unarchive:
+    src: "{{ cache_dir }}/node_exporter-{{ node_exporter_ver }}.linux-{{ arch }}.tar.gz"
+    dest: "/tmp/"
+  delegate_to: localhost
+- name: Deploy node exporter binary
+  ansible.builtin.copy:
+    src: "/tmp/node_exporter-{{ node_exporter_ver }}.linux-{{ arch }}/node_exporter"
+    dest: "/usr/sbin/node_exporter"
+    mode: '0755'
+- name: Deploy node_exporter.service
+  ansible.builtin.copy:
+    src: "files/node_exporter.service"
+    dest: "/etc/systemd/system/node_exporter.service"
+    mode: '0644'
+- name: Start node exporter
+  ansible.builtin.systemd:
+    name: node_exporter
+    state: started
+    enabled: true
+    daemon_reload: true

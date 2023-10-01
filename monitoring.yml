@@ -1,4 +1,9 @@
 ---
+- name: Setup targets
+  hosts: targets
+  become: true
+  roles:
+    - targets
 - name: Setup prometheus server
   hosts: prometheus_server
   become: true
