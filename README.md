@@ -20,8 +20,8 @@
 
 ## 使用方法
 
-- control nodeセットアップ
+- prometheus serverセットアップ
   - デプロイコマンド実行
-    - `ansible-playbook -i inventories/development/hosts.yml control_node.yml -K`
+    - `ansible-playbook -i inventories/development/hosts.yml prometheus_server.yml -K`
       - 途中でsudoパスワードを聞かれるので入力
 
