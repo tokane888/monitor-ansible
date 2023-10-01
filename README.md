@@ -1,6 +1,6 @@
 # init-monitor
 
-- ansibleで下記をubuntu環境にデプロイ
+- ansibleで下記をlinux環境にデプロイ
   - prometheus
   - grafana
 - ディレクトリ構成
