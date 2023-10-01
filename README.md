@@ -1,4 +1,4 @@
-# init-monitor
+# monitor-ansible
 
 - ansibleで下記をlinux環境にデプロイ
   - prometheus
