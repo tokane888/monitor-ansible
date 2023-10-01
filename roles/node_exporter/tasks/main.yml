@@ -4,6 +4,7 @@
 # オプション引数
 #   cache_dir: ダウンロードした資材を保管するキャッシュディレクトリ
 - name: Make cache directory
+  become: false
   ansible.builtin.file:
     path: "{{ cache_dir }}"
     state: directory
@@ -16,12 +17,14 @@
   ansible.builtin.set_fact:
     arch: "{{ 'amd64' if ansible_architecture == 'x86_64' else 'unknown' }}"
 - name: Check if node exporter tarball exists in cache directory
+  become: false
   ansible.builtin.stat:
     path: "{{ cache_dir }}/node_exporter-{{ node_exporter_ver }}.linux-{{ arch }}.tar.gz"
   register: node_exporter_stat
   delegate_to: localhost
 - name: Download node exporter when node exporter tarball doesn't exists in cache directory
   when: not node_exporter_stat.stat.exists
+  become: false
   ansible.builtin.get_url:
     url:
       "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_ver }}/node_exporter-{{ node_exporter_ver }}.linux-{{ arch }}.tar.gz"
@@ -29,6 +32,7 @@
     mode: '0755'
   delegate_to: localhost
 - name: Extract node exporter tarball
+  become: false
   ansible.builtin.unarchive:
     src: "{{ cache_dir }}/node_exporter-{{ node_exporter_ver }}.linux-{{ arch }}.tar.gz"
     dest: "/tmp/"

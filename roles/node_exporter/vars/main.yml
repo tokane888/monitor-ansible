@@ -1,2 +1,2 @@
 ---
-cache_dir: /var/cache/ansible
+cache_dir: ~/.ansible/cache
