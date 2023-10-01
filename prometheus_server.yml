@@ -1,0 +1,6 @@
+---
+- name: Setup prometheus server
+  hosts: prometheus_server
+  become: true
+  roles:
+    - prometheus_server
