@@ -3,6 +3,7 @@
 - ansibleで下記をlinux環境にデプロイ
   - prometheus
   - grafana
+- prometheus/grafanaサーバと、監視対象(target)の両方を構築
 - ディレクトリ構成
   - 下記の公式推奨構成に従う
     - https://docs.ansible.com/ansible/2.9/user_guide/playbooks_best_practices.html#alternative-directory-layout
