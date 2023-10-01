@@ -11,10 +11,18 @@
     mode: "0755"
   delegate_to: localhost
 
-# TODO: archラズパイ3B+以降対応(arm64)
 - name: Convert ansible_architecture to arch in download url
   ansible.builtin.set_fact:
-    arch: "{% if ansible_architecture == 'x86_64' %}amd64{% elif ansible_architecture == 'armv6l' %}armv6{% else %}unknown{% endif %}"
+    arch: >-
+      {%- if ansible_architecture == 'x86_64' -%}
+        amd64
+      {%- elif ansible_architecture == 'armv6l' -%}
+        armv6
+      {%- elif ansible_architecture == 'armv7l' -%}
+        armv7
+      {%- else -%}
+        unknown
+      {%- endif -%}
 - name: Check if node exporter tarball exists in cache directory
   become: false
   ansible.builtin.stat:
